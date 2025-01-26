@@ -62,6 +62,8 @@ class Game(object):
         self.addEnemy(EEnemyType.ZOMBIE, 26, 29)
         self.addEnemy(EEnemyType.ZOMBIE, 29, 30)
 
+        self.overlay = pygame.image.load("images/overlay.png")
+
         
     def runLogic(self):
         # --- list() - for make copy and prevent "RuntimeError: dictionary changed size during iteration"
@@ -76,6 +78,8 @@ class Game(object):
         sorted_values = sorted(self.actors.items(), key=lambda index : index[1].getY())
         for key, value in sorted_values:
             value.draw()
+
+        game_screen.Screen.screen.blit(self.overlay, [0, 0])
 
         self.ui.draw(health_coef = self.player_ctrl.health / self.player_ctrl.max_health, player_pos = self.lvl_view.getCellByCoord(*self.player_actor.getPosition()))
 
