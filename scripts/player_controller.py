@@ -1,4 +1,4 @@
-import resource_manager
+from scripts import resource_manager
 from pygame.locals import *
 from enum import Enum
 import math

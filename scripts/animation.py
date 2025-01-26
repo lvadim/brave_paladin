@@ -14,7 +14,6 @@ class AnimationData:
         self.frames = data['frames']
         self.name = data['name']
 
-
 class Animation:
     def __init__(self, sprites, animatiom_data):
         self.sprites = sprites

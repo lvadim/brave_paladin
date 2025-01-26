@@ -1,5 +1,5 @@
 import pygame
-import resource_manager
+from scripts import resource_manager 
 
 class SpriteSheet(object):
     def __init__(self, fileName, piece_width, piece_height, offset_x = 0, offset_y = 0):

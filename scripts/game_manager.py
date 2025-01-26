@@ -1,18 +1,18 @@
 import pygame
-import level_view
-import level_generator
+from scripts import level_view
+from scripts import level_generator
 from pygame.locals import *
-import resource_manager
-import actor
-import player_controller
-import game_screen
-import input_manager
-import skeleton_logic
-import zombie_logic
-import my_utils
-import game_ui
+from scripts import resource_manager
+from scripts import actor
+from scripts import player_controller
+from scripts import game_screen
+from scripts import input_manager
+from scripts import skeleton_logic
+from scripts import zombie_logic
+from scripts import my_utils
+from scripts import game_ui
 from enum import Enum
-import monster_behaviour
+from scripts import monster_behaviour
 
 #Background color
 BACKGROUND = (20, 20, 20)

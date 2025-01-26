@@ -1,9 +1,9 @@
-import resource_manager
+from scripts import resource_manager
 from pygame.locals import *
 from enum import Enum
 import math
 import pygame
-import my_utils
+from scripts import my_utils
 import random
 
 class PlayerState(Enum):

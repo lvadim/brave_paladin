@@ -1,6 +1,6 @@
 import pygame
-import game_manager
-import input_manager
+from scripts import game_manager
+from scripts import input_manager
     
 def main():
     pygame.init()

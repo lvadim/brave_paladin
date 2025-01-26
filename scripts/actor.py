@@ -1,5 +1,5 @@
 import pygame
-import animated_sprite
+from scripts import animated_sprite
 
 class Actor:
 	def __init__(self, logic, data_provider, uid):

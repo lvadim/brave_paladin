@@ -1,5 +1,5 @@
 import pygame
-import game_screen
+from scripts import game_screen
 
 class AnimatedSprite(pygame.sprite.Sprite):
     def __init__(self, animation_complete_callback = None):

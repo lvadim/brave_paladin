@@ -1,8 +1,8 @@
 import pygame
 import numpy as np
-import map_data
-import level_generator
-import game_screen
+from scripts import map_data
+from scripts import level_generator
+from scripts import game_screen
 import math
 import random
 

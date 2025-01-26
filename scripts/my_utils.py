@@ -1,4 +1,4 @@
-import actor
+from scripts import actor
 import math
 import random
 

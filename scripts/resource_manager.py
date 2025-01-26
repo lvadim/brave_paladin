@@ -1,6 +1,6 @@
 import pygame
-import animation
-import sprite_sheet
+from scripts import animation
+from scripts import sprite_sheet
 
 class ResourceManager:
     images = dict()

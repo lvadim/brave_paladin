@@ -1,5 +1,5 @@
 import pygame
-import game_screen
+from scripts import game_screen
 from pygame.locals import *
 
 RED = (255, 0, 0)
