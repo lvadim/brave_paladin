@@ -1,0 +1,14 @@
+{
+	"width": 130,
+	"height": 90,
+	"image_file": "images/Skeleton.png",
+	"animation_speed": 100,
+	"name": "attack",
+
+	"frames": [
+		{"x": 43, "y": 371},
+		{"x": 183, "y": 371},
+		{"x": 316, "y": 371},
+		{"x": 483, "y": 371}
+	]
+}

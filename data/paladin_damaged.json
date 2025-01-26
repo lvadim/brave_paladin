@@ -1,0 +1,13 @@
+{
+	"width": 116,
+	"height": 75,
+	"image_file": "images/Paladin.png",
+	"animation_speed": 150,
+	"name": "damaged",
+
+	"frames": [
+		{"x": 27, "y": 397},
+		{"x": 250, "y": 397},
+		{"x": 387, "y": 397}
+	]
+}

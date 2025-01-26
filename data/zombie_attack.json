@@ -1,0 +1,14 @@
+{
+	"width": 80,
+	"height": 75,
+	"image_file": "images/Zombie.png",
+	"animation_speed": 100,
+	"name": "attack",
+
+	"frames": [
+		{"x": 507, "y": 261},
+		{"x": 607, "y": 261},
+		{"x": 707, "y": 261},
+		{"x": 807, "y": 261}
+	]
+}

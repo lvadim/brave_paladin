@@ -1,0 +1,15 @@
+{
+	"width": 52,
+	"height": 75,
+	"image_file": "images/Skeleton.png",
+	"animation_speed": 100,
+	"name": "idle",
+
+	"frames": [
+		{"x": 21, "y": 76},
+		{"x": 72, "y": 76},
+		{"x": 120, "y": 76},
+		{"x": 175, "y": 76},
+		{"x": 225, "y": 76}
+	]
+}

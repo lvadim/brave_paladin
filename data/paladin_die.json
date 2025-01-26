@@ -1,0 +1,14 @@
+{
+	"width": 116,
+	"height": 70,
+	"image_file": "images/Paladin.png",
+	"animation_speed": 220,
+	"name": "die",
+
+	"frames": [
+		{"x": 387, "y": 397},
+		{"x": 507, "y": 397},
+		{"x": 624, "y": 397},
+		{"x": 748, "y": 397},
+		{"x": 867, "y": 397}
+	]}

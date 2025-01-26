@@ -1,0 +1,15 @@
+{
+	"width": 80,
+	"height": 75,
+	"image_file": "images/Zombie.png",
+	"animation_speed": 150,
+	"name": "damaged",
+
+	"frames": [
+		{"x": 27,  "y": 347},
+		{"x": 124, "y": 347},
+		{"x": 221, "y": 347},
+		{"x": 318, "y": 347},
+		{"x": 415, "y": 347}
+	]
+}

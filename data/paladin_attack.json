@@ -1,0 +1,17 @@
+{
+	"width": 112,
+	"height": 105,
+	"image_file": "images/Paladin.png",
+	"animation_speed": 100,
+	"name": "attack",
+
+	"frames": [
+		{"x": 27, "y": 306},
+		{"x": 147, "y": 306},
+		{"x": 267, "y": 306},
+		{"x": 387, "y": 306},
+		{"x": 507, "y": 306},
+		{"x": 619, "y": 306},
+		{"x": 859, "y": 306}
+	]
+}
