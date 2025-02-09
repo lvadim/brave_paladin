@@ -37,7 +37,7 @@ class Actor:
 		return (self.logic.pos_x, self.logic.pos_y)
 		
 	def getAttackDist(self):
-		return self.logic.attackDist
+		return self.logic.attack_distance
 
 	def onDamage(self, damage_count):
 		self.logic.onDamage(damage_count)
