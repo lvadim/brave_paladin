@@ -22,13 +22,13 @@ class AnimatedSprite(pygame.sprite.Sprite):
             self.runningFrame += 1
 
     def prevFrame(self):
-   		if self.runningFrame == 0:
-   			self.runningFrame = len(self.animation.sprites) - 1
-   		else:
-   			self.runningFrame -= 1
+        if self.runningFrame == 0:
+            self.runningFrame = len(self.animation.sprites) - 1
+        else:
+            self.runningFrame -= 1
 
     def stopPlay(self):
-   		self.running = not self.running
+        self.running = not self.running
         
     def Update(self):
         if not self.animation: return
@@ -36,7 +36,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.image = self.animation.sprites[self.runningFrame]
     
         if self.running:
-            if pygame.time.get_ticks() - self.runningTime > self.animation.speed:
+            if pygame.time.get_ticks() - self.runningTime > self.animation.animation_speed:
                 self.runningTime = pygame.time.get_ticks()
                 self.nextFrame()
 
@@ -69,5 +69,3 @@ class AnimatedSprite(pygame.sprite.Sprite):
 
     def setLastFrame(self):
         self.runningFrame = len(self.animation.sprites) - 1
-
-        

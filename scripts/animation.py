@@ -1,23 +1,33 @@
 import json
+from dataclasses import dataclass
+from typing import List
+import pygame
+from scripts.utils import Point
 
-class AnimationData:
-    def __init__(self, filename):
-        self.load(filename)
-
-    def load(self, filename):
-        f = open(filename)
-        data = json.load(f)
-        self.width = data['width']
-        self.height = data['height']
-        self.image_file = data['image_file']
-        self.animation_speed = data['animation_speed']
-        self.frames = data['frames']
-        self.name = data['name']
-
+@dataclass
 class Animation:
-    def __init__(self, sprites, animatiom_data):
-        self.sprites = sprites
-        self.speed = animatiom_data.animation_speed
-        self.width = animatiom_data.width
-        self.height = animatiom_data.height
-        self.name = animatiom_data.name
+    """Represents a sprite animation with its metadata and frames"""
+    name: str
+    width: int
+    height: int
+    animation_speed: int
+    image_file: str
+    frames: List[Point]
+    sprites: List[pygame.Surface]
+
+    @staticmethod
+    def load(filename: str) -> 'Animation':
+        """Load animation data from a JSON file"""
+        with open(filename) as f:
+            data = json.load(f)
+
+        return Animation(
+            name=data['name'],
+            width=data['width'],
+            height=data['height'],
+            animation_speed=data['animation_speed'],
+            image_file=data['image_file'],
+            # This is some inconsistency in the data format, but we can handle it
+            frames=[Point(frame['x'], frame['y']) for frame in data['frames']],
+            sprites=[]  # Will be populated by ResourceManager
+        )

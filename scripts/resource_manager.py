@@ -8,26 +8,21 @@ class ResourceManager:
     
     @staticmethod    
     def getImage(image_name):
-    	if image_name in ResourceManager.images.keys():
-    		return ResourceManager.images[image_name]
-    	else:
-    		ResourceManager.images[image_name] = pygame.image.load(image_name)
-    		return ResourceManager.images[image_name]
+        if image_name in ResourceManager.images.keys():
+            return ResourceManager.images[image_name]
+        else:
+            ResourceManager.images[image_name] = pygame.image.load(image_name)
+            return ResourceManager.images[image_name]
 
     @staticmethod    
     def getAnimation(animation_name):
         if animation_name in ResourceManager.animations.keys():
             return ResourceManager.animations[animation_name]
         else:
-            anim_data = animation.AnimationData(animation_name)
-
-            sheet = sprite_sheet.SpriteSheet(anim_data.image_file, anim_data.width, anim_data.height)
-            sprites = []
-            for frame in anim_data.frames:
-                sprites.append(sheet.image_frame(frame))
+            anim = animation.Animation.load(animation_name)
+            sheet = sprite_sheet.SpriteSheet(anim.image_file, anim.width, anim.height)
             
-            anim = animation.Animation(sprites, anim_data)
-
+            anim.sprites = [sheet.image_frame(frame) for frame in anim.frames]
             ResourceManager.animations[animation_name] = anim
             
-            return ResourceManager.animations[animation_name]
+            return anim
