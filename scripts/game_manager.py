@@ -4,6 +4,7 @@ from scripts import level_generator
 from pygame.locals import *
 from scripts import resource_manager
 from scripts import actor
+from scripts import player_pawn
 from scripts import player_controller
 from scripts import game_screen
 from scripts import input_manager
@@ -22,7 +23,6 @@ class EEnemyType(Enum):
     ZOMBIE = 1
 
 class Game(object):
-
     unique_actor_id = 0
 
     def getNextActorId():
@@ -32,7 +32,6 @@ class Game(object):
     def __init__(self):
         lvl_gen = level_generator.LevelGenerator()
         self.lvl_view = level_view.LevelView("data/dungeon.json") #lvl_gen)
-        #self.lvl_view.SetPosition(100, 100)
 
         #--- align view with player position
         screen_center = game_screen.Screen.getScreenCenter()
@@ -42,12 +41,15 @@ class Game(object):
         
         self.actors = dict()
 
-        #--- player
-        self.player_ctrl = player_controller.PlayerController(self, 0)
-        input_manager.InputManager.AddKeyDownListener(self.player_ctrl)
-        input_manager.InputManager.AddKeyUpListener(self.player_ctrl)
-        self.player_actor = actor.Actor(self.player_ctrl, self, 0)
+        #--- player setup
+        self.player_pawn = player_pawn.PlayerPawn(self, 0)
+        self.player_actor = actor.Actor(self.player_pawn, self, 0)
         self.actors[self.player_actor.uid] = self.player_actor
+        
+        #--- player input handling
+        self.player_controller = player_controller.PlayerController(self.player_pawn)
+        input_manager.InputManager.AddKeyDownListener(self.player_controller)
+        input_manager.InputManager.AddKeyUpListener(self.player_controller)
 
         self.ui = game_ui.GameUI()
 
@@ -63,7 +65,6 @@ class Game(object):
         self.addEnemy(EEnemyType.ZOMBIE, 29, 30)
 
         self.overlay = pygame.image.load("images/overlay.png")
-
         
     def runLogic(self):
         # --- list() - for make copy and prevent "RuntimeError: dictionary changed size during iteration"
@@ -81,18 +82,19 @@ class Game(object):
 
         game_screen.Screen.screen.blit(self.overlay, [0, 0])
 
-        self.ui.draw(health_coef = self.player_ctrl.health / self.player_ctrl.max_health, player_pos = self.lvl_view.getCellByCoord(*self.player_actor.getPosition()))
+        self.ui.draw(
+            health_coef=self.player_pawn.health / self.player_pawn.max_health,
+            player_pos=self.lvl_view.getCellByCoord(*self.player_actor.getPosition())
+        )
 
         pygame.display.update()
 
-    def onKeyDown(self, ley_id):
-        if ley_id == K_l:
-            #self.lvl_view.SetPosition(200, 200)
-            #self.lvl_view.SetPosition(360, 240)
+    def onKeyDown(self, key_id):
+        if key_id == K_l:
             self.lvl_view.reloadMap("data/dungeon.json")
-        elif ley_id == K_z:
-            self.addEnemy()
-        elif ley_id == K_x:
+        elif key_id == K_z:
+            self.addEnemyRandomly()
+        elif key_id == K_x:
             print ("---> actors:", len(self.actors))
 
     def addEnemyRandomly(self):
@@ -113,7 +115,6 @@ class Game(object):
             enemy_logic = zombie_logic.ZombieLogic(self, coord_x, coord_y, new_uid)
         
         enemy_actor = actor.Actor(enemy_logic, self, new_uid)
-
         self.actors[enemy_actor.uid] = enemy_actor
 
     # --- data provider methods ---------------------
@@ -121,11 +122,9 @@ class Game(object):
         return self.lvl_view.GetPosition()
 
     def getPlayerInitialPos(self):
-        #tx, ty = self.lvl_view.getTileSize()
         player_cell_x = 2
         player_cell_y = 2
         return self.lvl_view.getCellCoordinates(player_cell_x, player_cell_y)
-        #return (player_cell_x * tx + tx / 2, player_cell_y * ty + ty / 2)
 
     def canMoveHere(self, x, y, object_width, object_height):
         check1 = self.lvl_view.isPassable(x, y)
@@ -134,9 +133,9 @@ class Game(object):
         check4 = self.lvl_view.isPassable(x, y - object_height)
         return check1 and check2 and check3 and check4
 
-    def onAttack(self, attecker_actor_id, damage_count):
-        if attecker_actor_id in self.actors:
-            attacker = self.actors[attecker_actor_id]
+    def onAttack(self, attacker_actor_id, damage_count):
+        if attacker_actor_id in self.actors:
+            attacker = self.actors[attacker_actor_id]
             if attacker.uid == 0: # --- player attacks monster
                 for key, value in self.actors.items():
                     dist = my_utils.distBetweenActors(attacker, value)
@@ -160,4 +159,3 @@ class Game(object):
 
     def onPlayerMove(self, dx, dy):
         self.lvl_view.move(-dx, -dy)
-                
