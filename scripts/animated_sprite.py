@@ -8,47 +8,36 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.animation = None
         self.onAnimationComplete = animation_complete_callback
         
-        self.running = True
-        self.runningFrame = 0
-        self.runningTime = pygame.time.get_ticks()
+        self.current_frame = 0
+        self.last_update = pygame.time.get_ticks()
         self.need_flip = False
 
     def nextFrame(self):
-        if self.runningFrame == len(self.animation.sprites) - 1:
-            self.runningFrame = 0
-            if (self.onAnimationComplete):
+        if self.current_frame == len(self.animation.sprites) - 1:
+            self.current_frame = 0
+            if self.onAnimationComplete:
                 self.onAnimationComplete(self.animation.name)
         else:
-            self.runningFrame += 1
+            self.current_frame += 1
 
-    def prevFrame(self):
-        if self.runningFrame == 0:
-            self.runningFrame = len(self.animation.sprites) - 1
-        else:
-            self.runningFrame -= 1
-
-    def stopPlay(self):
-        self.running = not self.running
-        
     def Update(self):
         if not self.animation: return
 
-        self.image = self.animation.sprites[self.runningFrame]
+        self.image = self.animation.sprites[self.current_frame]
     
-        if self.running:
-            if pygame.time.get_ticks() - self.runningTime > self.animation.animation_speed:
-                self.runningTime = pygame.time.get_ticks()
-                self.nextFrame()
+        if pygame.time.get_ticks() - self.last_update > self.animation.animation_speed:
+            self.last_update = pygame.time.get_ticks()
+            self.nextFrame()
 
     def Draw(self):
         if not self.animation: return
-        if (self.need_flip):
+        if self.need_flip:
             game_screen.Screen.screen.blit(pygame.transform.flip(self.image, True, False), self.rect)
         else:
             game_screen.Screen.screen.blit(self.image, self.rect)
 
     def SetAnimation(self, animation):
-        self.runningFrame = 0
+        self.current_frame = 0
         self.animation = animation
         self.image = self.animation.sprites[0]
         self.rect = self.image.get_rect()
@@ -68,4 +57,4 @@ class AnimatedSprite(pygame.sprite.Sprite):
             return (0, 0)
 
     def setLastFrame(self):
-        self.runningFrame = len(self.animation.sprites) - 1
+        self.current_frame = len(self.animation.sprites) - 1
