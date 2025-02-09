@@ -1,6 +1,5 @@
 import pygame
 from scripts import level_view
-from scripts import level_generator
 from pygame.locals import *
 from scripts import resource_manager
 from scripts import actor
@@ -8,12 +7,11 @@ from scripts import player_pawn
 from scripts import player_controller
 from scripts import game_screen
 from scripts import input_manager
-from scripts import skeleton_logic
-from scripts import zombie_logic
+from scripts import skeleton_pawn
+from scripts import zombie_pawn
 from scripts import my_utils
 from scripts import game_ui
 from enum import Enum
-from scripts import monster_behaviour
 
 #Background color
 BACKGROUND = (20, 20, 20)
@@ -30,8 +28,7 @@ class Game(object):
         return Game.unique_actor_id
 
     def __init__(self):
-        lvl_gen = level_generator.LevelGenerator()
-        self.lvl_view = level_view.LevelView("data/dungeon.json") #lvl_gen)
+        self.lvl_view = level_view.LevelView("data/dungeon.json")
 
         #--- align view with player position
         screen_center = game_screen.Screen.getScreenCenter()
@@ -100,21 +97,21 @@ class Game(object):
     def addEnemyRandomly(self):
         x, y = self.lvl_view.getRandomPassableCoord()
         new_uid = Game.getNextActorId()
-        enemy_logic = zombie_logic.ZombieLogic(self, x, y, new_uid)
-        enemy_actor = actor.Actor(enemy_logic, self, new_uid)
+        enemy_pawn = zombie_pawn.ZombiePawn(self, x, y, new_uid)
+        enemy_actor = actor.Actor(enemy_pawn, self, new_uid)
         self.actors[enemy_actor.uid] = enemy_actor
 
     def addEnemy(self, enemy_type, x, y):
         new_uid = Game.getNextActorId()
         coord_x, coord_y = self.lvl_view.getCellCoordinates(x, y)
-        enemy_logic = None
+        enemy_pawn = None
         
         if enemy_type == EEnemyType.SKELETON:
-            enemy_logic = skeleton_logic.SkeletonLogic(self, coord_x, coord_y, new_uid)
+            enemy_pawn = skeleton_pawn.SkeletonPawn(self, coord_x, coord_y, new_uid)
         elif enemy_type == EEnemyType.ZOMBIE:
-            enemy_logic = zombie_logic.ZombieLogic(self, coord_x, coord_y, new_uid)
+            enemy_pawn = zombie_pawn.ZombiePawn(self, coord_x, coord_y, new_uid)
         
-        enemy_actor = actor.Actor(enemy_logic, self, new_uid)
+        enemy_actor = actor.Actor(enemy_pawn, self, new_uid)
         self.actors[enemy_actor.uid] = enemy_actor
 
     # --- data provider methods ---------------------
