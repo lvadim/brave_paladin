@@ -1,7 +1,7 @@
-from scripts import monster_behaviour
+from scripts import monster_pawn
 from scripts.pawn import PawnConfig, PawnState
 
-class SkeletonLogic(monster_behaviour.MonsterBehaviour):
+class SkeletonPawn(monster_pawn.MonsterPawn):
     def __init__(self, data_provider, init_x, init_y, uid):
         config = PawnConfig(
             speed=2,
