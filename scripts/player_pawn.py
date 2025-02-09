@@ -1,4 +1,3 @@
-from pygame.locals import *
 from scripts.pawn import Pawn, PawnConfig, PawnState
 
 class PlayerPawn(Pawn):
