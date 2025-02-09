@@ -1,5 +1,6 @@
 import pygame
 from scripts import game_screen
+from scripts.animation import AnimEvent
 
 class AnimatedSprite(pygame.sprite.Sprite):
     def __init__(self, animation_complete_callback = None):
@@ -16,7 +17,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
         if self.current_frame == len(self.animation.sprites) - 1:
             self.current_frame = 0
             if self.onAnimationComplete:
-                self.onAnimationComplete(self.animation.name)
+                self.onAnimationComplete(self.animation.event)
         else:
             self.current_frame += 1
 

@@ -59,12 +59,7 @@ class PlayerPawn(Pawn):
             elif dx > 0:
                 self.checkFlip(dx)
 
-    def onAnimationComplete(self, name: str):
-        if name == "attack":
-            self.data_provider.onAttack(self.uid, self.damage)
-            self.setState(PawnState.IDLE)
-        elif name == "damaged":
-            self.setState(PawnState.IDLE)
-        elif name == "die":
-            self.view.running = False
-            self.view.setLastFrame()  # Keep player visible when dead
+    def onDeathComplete(self):
+        """Player stays visible when dead but doesn't move"""
+        self.view.running = False
+        self.view.setLastFrame()  # Keep player visible in death pose
