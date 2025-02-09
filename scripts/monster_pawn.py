@@ -10,8 +10,8 @@ class EIntentions(Enum):
     GOTO_PLAYER = 2
 
 class MonsterPawn(Pawn):
-    def __init__(self, data_provider, init_x: float, init_y: float, uid: int, config: PawnConfig):
-        super().__init__(data_provider, init_x, init_y, uid, config)
+    def __init__(self, game, init_x: float, init_y: float, uid: int, config: PawnConfig):
+        super().__init__(game, init_x, init_y, uid, config)
         
         self.currentIntention = EIntentions.NONE
         self.intentionTimer = pygame.time.get_ticks()
@@ -26,13 +26,13 @@ class MonsterPawn(Pawn):
             if (self.state == PawnState.IDLE or self.state == PawnState.WALK):
                 self.setState(PawnState.ATTACK)
                 self.want_attack = False
-                self.checkFlip(self.data_provider.getPlayerPosition()[0] - self.pos_x)
+                self.checkFlip(self.game.getPlayerPosition()[0] - self.pos_x)
     
         if (self.state == PawnState.IDLE or self.state == PawnState.WALK):
             self.processIntentions()
 
         my_pos = pygame.Vector2(self.pos_x, self.pos_y)
-        player_pos = self.data_provider.getPlayerPosition()
+        player_pos = self.game.getPlayerPosition()
         disToPlayer = (player_pos - my_pos).length() 
         if disToPlayer <= self.attack_distance:
             self.want_attack = True
@@ -41,7 +41,7 @@ class MonsterPawn(Pawn):
         if self.currentIntention == EIntentions.NONE:
             pass
         elif self.currentIntention == EIntentions.GOTO_PLAYER:
-            player_pos = pygame.Vector2(self.data_provider.getPlayerPosition())
+            player_pos = pygame.Vector2(self.game.getPlayerPosition())
             target_pos = my_utils.getRandomPointNear(player_pos, 100)
             self.processMoving(target_pos)
         elif self.currentIntention == EIntentions.GOTO_POINT:
@@ -59,7 +59,7 @@ class MonsterPawn(Pawn):
 
         self.intentionTimer = pygame.time.get_ticks()
         if self.currentIntention == EIntentions.GOTO_POINT:
-             self.intentionPoint = self.data_provider.getRandomPassablePoint()
+             self.intentionPoint = self.game.getRandomPassablePoint()
         elif self.currentIntention == EIntentions.NONE:
             self.setState(PawnState.IDLE)
     
@@ -85,6 +85,6 @@ class MonsterPawn(Pawn):
                 self.switchIntention()
 
     def isPlayerNear(self) -> bool:
-        player_pos = pygame.Vector2(self.data_provider.getPlayerPosition())
+        player_pos = pygame.Vector2(self.game.getPlayerPosition())
         my_pos = pygame.Vector2(self.pos_x, self.pos_y)
         return (player_pos - my_pos).length() < 360

@@ -22,9 +22,9 @@ class PawnConfig:
     animations: Dict[PawnState, str] = None
 
 class Pawn:
-    def __init__(self, data_provider, init_x, init_y, uid, config: PawnConfig):
+    def __init__(self, game, init_x, init_y, uid, config: PawnConfig):
         self.view = None
-        self.data_provider = data_provider
+        self.game = game
         self.uid = uid
 
         self.pos_x = init_x
@@ -71,7 +71,7 @@ class Pawn:
             return
             
         if event == AnimEvent.ATTACK:
-            self.data_provider.onAttack(self.uid, self.damage)
+            self.game.onAttack(self.uid, self.damage)
             self.setState(PawnState.IDLE)
         elif event == AnimEvent.DAMAGED:
             self.setState(PawnState.IDLE)
@@ -81,7 +81,7 @@ class Pawn:
     def onDeathComplete(self):
         """Override this to customize death behavior"""
         self.view.running = False
-        self.data_provider.onDie(self.uid)
+        self.game.onDie(self.uid)
 
     def onDamage(self, damage_count: int):
         self.health -= damage_count
@@ -99,7 +99,7 @@ class Pawn:
             self.view.SetFlip(False)
 
     def tryMove(self, new_x: float, new_y: float) -> bool:
-        isValid = self.data_provider.canMoveHere(
+        isValid = self.game.canMoveHere(
             new_x, new_y, 
             self.footprint_width, 
             self.footprint_height

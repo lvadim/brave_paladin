@@ -1,8 +1,8 @@
 from scripts.pawn import Pawn, PawnConfig, PawnState
 
 class PlayerPawn(Pawn):
-    def __init__(self, data_provider, uid):
-        init_x, init_y = data_provider.getPlayerInitialPos()
+    def __init__(self, game, uid):
+        init_x, init_y = game.getPlayerInitialPos()
         config = PawnConfig(
             speed=2,
             damage=50,
@@ -18,7 +18,7 @@ class PlayerPawn(Pawn):
                 PawnState.DMG: "data/paladin_damaged.json"
             }
         )
-        super().__init__(data_provider, init_x, init_y, uid, config)
+        super().__init__(game, init_x, init_y, uid, config)
 
         # Movement flags controlled by PlayerController
         self.want_up = False
@@ -47,7 +47,7 @@ class PlayerPawn(Pawn):
             new_y = self.pos_y + dy
 
             if self.tryMove(new_x, new_y):
-                self.data_provider.onPlayerMove(dx, dy)
+                self.game.onPlayerMove(dx, dy)
 
             if abs(dx) > 0 or abs(dy) > 0:
                 self.setState(PawnState.WALK)

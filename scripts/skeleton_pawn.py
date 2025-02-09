@@ -1,8 +1,8 @@
-from scripts import monster_pawn
+from scripts.monster_pawn import MonsterPawn
 from scripts.pawn import PawnConfig, PawnState
 
-class SkeletonPawn(monster_pawn.MonsterPawn):
-    def __init__(self, data_provider, init_x, init_y, uid):
+class SkeletonPawn(MonsterPawn):
+    def __init__(self, game, init_x: float, init_y: float, uid: int):
         config = PawnConfig(
             speed=2,
             damage=10,
@@ -18,4 +18,4 @@ class SkeletonPawn(monster_pawn.MonsterPawn):
                 PawnState.DMG: "data/skeleton_damaged.json"
             }
         )
-        super().__init__(data_provider, init_x, init_y, uid, config)
+        super().__init__(game, init_x, init_y, uid, config)
