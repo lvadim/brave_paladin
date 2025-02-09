@@ -1,8 +1,7 @@
 import pygame
-import json
 from scripts import animation
 from scripts import sprite_sheet
-from typing import Dict
+from typing import Dict, List
 
 class ResourceManager:
     images: Dict[str, pygame.Surface] = {}
@@ -17,23 +16,16 @@ class ResourceManager:
         ResourceManager.images[filename] = image
         return image
 
+    @staticmethod
+    def load_sprites(image_file: str, width: int, height: int, frames: List[dict]) -> List[pygame.Surface]:
+        sheet = sprite_sheet.SpriteSheet(image_file, width, height)
+        return [sheet.image_frame(frame) for frame in frames]
+
     @staticmethod    
     def getAnimation(filename: str) -> animation.Animation:
         if filename in ResourceManager.animations:
             return ResourceManager.animations[filename]
         
-        with open(filename) as f:
-            data = json.load(f)
-            
-        sheet = sprite_sheet.SpriteSheet(data['image_file'], data['width'], data['height'])
-        sprites = [sheet.image_frame(frame) for frame in data['frames']]
-        
-        anim = animation.Animation(
-            sprites=sprites,
-            animation_speed=data['animation_speed'],
-            width=data['width'],
-            height=data['height'],
-            name=data['name']
-        )
+        anim = animation.Animation.create_from_json(filename, ResourceManager.load_sprites)
         ResourceManager.animations[filename] = anim
         return anim
