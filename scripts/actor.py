@@ -2,11 +2,11 @@ import pygame
 from scripts import animated_sprite
 
 class Actor:
-	def __init__(self, logic, data_provider, uid):
+	def __init__(self, logic, game, uid):
 		self.sprite = animated_sprite.AnimatedSprite(self.onAnimationComplete)
 		self.logic = logic
 		self.logic.assignView(self.sprite)
-		self.data_provider = data_provider
+		self.game = game
 		self.uid = uid
 
 	def draw(self):
@@ -24,7 +24,7 @@ class Actor:
 	def getSpriteActualPosition(self):
 		w, h = self.sprite.GetSize()
 		x, y = self.logic.GetPosition()
-		mx, my = self.data_provider.getMapPosition()
+		mx, my = self.game.getMapPosition()
 		return(mx + x - w / 2, my + y - h)
 
 	def getY(self):
@@ -37,7 +37,7 @@ class Actor:
 		return (self.logic.pos_x, self.logic.pos_y)
 		
 	def getAttackDist(self):
-		return self.logic.attackDist
+		return self.logic.attack_distance
 
 	def onDamage(self, damage_count):
 		self.logic.onDamage(damage_count)

@@ -1,33 +1,45 @@
 import pygame
+import json
 from scripts import animation
 from scripts import sprite_sheet
+from typing import Dict
 
 class ResourceManager:
-    images = dict()
-    animations = dict()    
-    
-    @staticmethod    
-    def getImage(image_name):
-    	if image_name in ResourceManager.images.keys():
-    		return ResourceManager.images[image_name]
-    	else:
-    		ResourceManager.images[image_name] = pygame.image.load(image_name)
-    		return ResourceManager.images[image_name]
+    images: Dict[str, pygame.Surface] = {}
+    animations: Dict[str, animation.Animation] = {}
 
     @staticmethod    
-    def getAnimation(animation_name):
-        if animation_name in ResourceManager.animations.keys():
-            return ResourceManager.animations[animation_name]
-        else:
-            anim_data = animation.AnimationData(animation_name)
+    def getImage(filename: str) -> pygame.Surface:
+        """Load and cache an image"""
+        if filename in ResourceManager.images:
+            return ResourceManager.images[filename]
+        
+        image = pygame.image.load(filename)
+        ResourceManager.images[filename] = image
+        return image
 
-            sheet = sprite_sheet.SpriteSheet(anim_data.image_file, anim_data.width, anim_data.height)
-            sprites = []
-            for frame in anim_data.frames:
-                sprites.append(sheet.image_frame(frame))
-            
-            anim = animation.Animation(sprites, anim_data)
+    @staticmethod    
+    def getAnimation(filename: str) -> animation.Animation:
+        """Load and cache an animation from JSON file"""
+        if filename in ResourceManager.animations:
+            return ResourceManager.animations[filename]
 
-            ResourceManager.animations[animation_name] = anim
-            
-            return ResourceManager.animations[animation_name]
+        # Load animation data
+        with open(filename) as f:
+            data = json.load(f)
+
+        # Extract sprites from sprite sheet
+        sheet = sprite_sheet.SpriteSheet(data['image_file'], data['width'], data['height'])
+        sprites = [sheet.image_frame(frame) for frame in data['frames']]
+
+        # Create animation
+        anim = animation.Animation(
+            sprites=sprites,
+            animation_speed=data['animation_speed'],
+            width=data['width'],
+            height=data['height'],
+            name=data['name']
+        )
+
+        ResourceManager.animations[filename] = anim
+        return anim
